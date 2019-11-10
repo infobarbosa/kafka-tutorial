@@ -5,82 +5,106 @@ services:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 22181
+      ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
-    network_mode: host
-    extra_hosts:
-      - "moby:127.0.0.1"
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+    container_name: zookeeper1
 
   zookeeper-2:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_SERVER_ID: 2
-      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
-    network_mode: host
-    extra_hosts:
-      - "moby:127.0.0.1"
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+    container_name: zookeeper2
 
   zookeeper-3:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_SERVER_ID: 3
-      ZOOKEEPER_CLIENT_PORT: 42181
+      ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
-    network_mode: host
-    extra_hosts:
-      - "moby:127.0.0.1"
+      ZOOKEEPER_SERVERS: zookeeper1:2888:3888;zookeeper2:2888:3888;zookeeper3:2888:3888
+    container_name: zookeeper3
 
   kafka-1:
     image: confluentinc/cp-kafka:latest
-    network_mode: host
+    container_name: kafka-1
     depends_on:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: localhost:22181,localhost:32181,localhost:42181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:19092
-    extra_hosts:
-      - "moby:127.0.0.1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092
+      KAFKA_NUM_PARTITIONS: 6
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
 
   kafka-2:
     image: confluentinc/cp-kafka:latest
-    network_mode: host
+    container_name: kafka-2
     depends_on:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: localhost:22181,localhost:32181,localhost:42181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092
-    extra_hosts:
-      - "moby:127.0.0.1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092
+      KAFKA_NUM_PARTITIONS: 6
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
 
   kafka-3:
     image: confluentinc/cp-kafka:latest
-    network_mode: host
+    container_name: kafka-3
     depends_on:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: localhost:22181,localhost:32181,localhost:42181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:39092
-    extra_hosts:
-      - "moby:127.0.0.1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9092
+      KAFKA_NUM_PARTITIONS: 6
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+
+  producer1:
+      image: kafka-producer-tutorial-image:latest
+      container_name: producer1
+      depends_on:
+        - kafka-1
+        - kafka-2
+        - kafka-3
+      environment:
+        BOOTSTRAP_SERVERS_CONFIG: kafka-1:9092,kafka-2:9092,kafka-3:9092
+
+  consumer1:
+    image: kafka-consumer-tutorial-image:latest
+    container_name: consumer1
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    environment:
+      BOOTSTRAP_SERVERS_CONFIG: kafka-1:9092,kafka-2:9092,kafka-3:9092
+
+  consumer2:
+    image: kafka-consumer-tutorial-image:latest
+    container_name: consumer2
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    environment:
+      BOOTSTRAP_SERVERS_CONFIG: kafka-1:9092,kafka-2:9092,kafka-3:9092
 
   scylla-1:
     image: scylladb/scylla
