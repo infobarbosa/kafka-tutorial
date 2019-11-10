@@ -8,8 +8,8 @@
     <artifactId>kafka-tutorial</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>kafka-producer-tutorial</module>
-        <module>kafka-consumer-tutorial</module>
+        <module>kafka-producer</module>
+        <module>kafka-consumer</module>
     </modules>
 
     <packaging>pom</packaging>

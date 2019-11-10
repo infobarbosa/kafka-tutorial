@@ -77,7 +77,7 @@ services:
       KAFKA_DEFAULT_REPLICATION_FACTOR: 3
 
   producer1:
-      image: kafka-producer-tutorial-image:latest
+      image: infobarbosa/kafka-producer:1.0-SNAPSHOT
       container_name: producer1
       depends_on:
         - kafka-1
@@ -87,7 +87,7 @@ services:
         BOOTSTRAP_SERVERS_CONFIG: kafka-1:9092,kafka-2:9092,kafka-3:9092
 
   consumer1:
-    image: kafka-consumer-tutorial-image:latest
+    image: infobarbosa/kafka-consumer:1.0-SNAPSHOT
     container_name: consumer1
     depends_on:
       - kafka-1
@@ -97,7 +97,7 @@ services:
       BOOTSTRAP_SERVERS_CONFIG: kafka-1:9092,kafka-2:9092,kafka-3:9092
 
   consumer2:
-    image: kafka-consumer-tutorial-image:latest
+    image: infobarbosa/kafka-consumer:1.0-SNAPSHOT
     container_name: consumer2
     depends_on:
       - kafka-1
