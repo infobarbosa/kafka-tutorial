@@ -1,5 +1,6 @@
 *.avro
 .idea/
+.DS_Store
 *.iml
 target/
 *.log

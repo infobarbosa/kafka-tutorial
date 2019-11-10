@@ -1,6 +1,3 @@
-[submodule "kafka-consumer-tutorial"]
-	path = kafka-consumer-tutorial
-	url = https://github.com/infobarbosa/kafka-consumer-tutorial
 [submodule "kafka-producer-tutorial"]
 	path = kafka-producer-tutorial
 	url = https://github.com/infobarbosa/kafka-producer-tutorial
