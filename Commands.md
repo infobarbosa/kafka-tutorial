@@ -46,8 +46,10 @@ docker exec -it kafka-1 kafka-console-producer --broker-list kafka-1:9092 --topi
 docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:9092 --topic teste
 
 # Ativando a aplicação Producer 
+export BOOTSTRAP_SERVERS_CONFIG=[servidor kafka]:[porta]
 java -jar kafka-producer-tutorial-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 # Ativando a aplicação Consumer
+export BOOTSTRAP_SERVERS_CONFIG=[servidor kafka]:[porta]
 java -jar kafka-consumer-tutorial-1.0-SNAPSHOT-jar-with-dependencies.jar
 
