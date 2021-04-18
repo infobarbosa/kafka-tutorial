@@ -4,3 +4,11 @@
 *.iml
 target/
 *.log
+.project
+.settings/
+kafka-consumer/.classpath
+kafka-consumer/.project
+kafka-consumer/.settings/
+kafka-producer/.classpath
+kafka-producer/.project
+kafka-producer/.settings/
