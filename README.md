@@ -12,13 +12,17 @@ mvn clean package
 > Atenção! O projeto utiliza `dockerfile-maven-plugin`, do Spotify. Dessa forma o Maven cuida da criação das imagens do produtor e consumidor automaticamente.
 
 # Build da imagem do produtor
-docker build . -t kafka-producer-tutorial-image
 > Atenção! O projeto utiliza `dockerfile-maven-plugin`, do Spotify. Dessa forma não é necessário fazer o build da imagem manualmente.
+```
+docker build . -t kafka-producer-tutorial-image
+```
 
 # Build da imagem do consumidor
-docker build . -t kafka-consumer-tutorial-image
 > Atenção! O projeto utiliza `dockerfile-maven-plugin`, do Spotify. Dessa forma não é necessário fazer o build da imagem manualmente.
-    
+```
+docker build . -t kafka-consumer-tutorial-image
+```
+ 
 # Inicializando todas as imagens de uma só vez
 ```
 docker-compose up -d
@@ -33,10 +37,10 @@ docker-compose up -d zookeeper-1 zookeeper-2 zookeeper-3
 docker-compose up -d kafka-1 kafka-2 kafka-3
 ```
 
-## KAFKA_NUM_PARTITIONS
+### `KAFKA_NUM_PARTITIONS`
 Perceba que o parâmetro `KAFKA_NUM_PARTITIONS` no arquivo docker-compose.yml está ajustado para **6**. Ou seja, um tópico criado automaticamente terá 6 partições por padrão.
 
-## KAFKA_DEFAULT_REPLICATION_FACTOR
+### `KAFKA_DEFAULT_REPLICATION_FACTOR`
 Perceba que o parâmetro `KAFKA_DEFAULT_REPLICATION_FACTOR` no arquivo docker-compose.yml está ajustado para **3**. Ou seja, um tópico criado automaticamente terá fator de replicação igual a 3 por padrão.
 
 # Logs do Zookeeper
