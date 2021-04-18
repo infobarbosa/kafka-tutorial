@@ -39,11 +39,6 @@ Perceba que o parâmetro `KAFKA_NUM_PARTITIONS` no arquivo docker-compose.yml es
 ## KAFKA_DEFAULT_REPLICATION_FACTOR
 Perceba que o parâmetro `KAFKA_DEFAULT_REPLICATION_FACTOR` no arquivo docker-compose.yml está ajustado para **3**. Ou seja, um tópico criado automaticamente terá fator de replicação igual a 3 por padrão.
 
-# Interrompendo (e eliminando) todas as imagens
-```
-docker-compose down
-```
-
 # Logs do Zookeeper
 ```
 docker logs -f zookeeper1
@@ -117,3 +112,7 @@ docker exec -it kafka-1 kafka-console-producer --broker-list kafka-1:9092 --topi
 docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:9092 --topic teste
 ```
 
+# Interrompendo (e eliminando) o laboratório
+```
+docker-compose down
+```
