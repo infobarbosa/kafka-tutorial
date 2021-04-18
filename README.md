@@ -83,8 +83,9 @@ docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name producer2 --networ
 
 # Ativando uma nova aplicação Consumer
 > Alterar o valor do parâmetro  `--name` de acordo com a necessidade.
+```
 docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name consumer3 --network=kafka-tutorial_kafkalabs -it infobarbosa/kafka-consumer:1.0-SNAPSHOT
-
+```
 
 # Listando os tópicos
 ```
