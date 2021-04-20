@@ -86,6 +86,15 @@ docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --
 docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --describe --group consumer-tutorial-group
 ```
 
+### Reset Offsets
+```
+docker exec -it kafka-1 kafka-consumer-groups --dry-run --reset-offsets --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --to-datetime 2021-04-20T00:00:00.000
+```
+Atenção a esta mensagem:
+```
+Error: Assignments can only be reset if the group 'consumer-tutorial-group' is inactive, but the current state is Stable.
+```
+
 # Ativando uma nova aplicação Producer 
 > Alterar o valor parâmetro  `--name` de acordo com a necessidade.
 ```
