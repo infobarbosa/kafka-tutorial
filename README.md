@@ -74,6 +74,18 @@ docker logs -f consumer1
 docker logs -f consumer2
 ```
 
+# Inspecionando Consumer Groups
+
+### List
+```
+docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --list
+```
+
+### Describe
+```
+docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --describe --group consumer-tutorial-group
+```
+
 # Ativando uma nova aplicação Producer 
 > Alterar o valor parâmetro  `--name` de acordo com a necessidade.
 ```
