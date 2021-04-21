@@ -87,9 +87,34 @@ docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --
 ```
 
 ### Reset Offsets
+> O commando `--reset-offsets` só funciona quando o tópico não possui nenhuma aplicação cliente ativa. Caso contrário a seguinte mensagem será emitida:
+> `Error: Assignments can only be reset if the group 'consumer-tutorial-group' is inactive, but the current state is Stable.`
+
+
+Opções:
+- `--shift-by <qualquer número inteiro positivo ou negativo>`
+- `--to-current`
+- `--to-latest`
+- `--to-offset <offset_integer>`
+- `--to-datetime <datetime_string>`
+- `--by-duration <duration_string>`
+
+`--reset-offsets`, quando utilizado __sem__ a opção `--execute` funciona apenas como um __preview__ do resultado do comando.
+
+Exemplo de __preview__
 ```
-docker exec -it kafka-1 kafka-consumer-groups --dry-run --reset-offsets --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --to-datetime 2021-04-20T00:00:00.000
+docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --reset-offsets --to-earliest 
 ```
+
+Exemplo com __--execute__
+```
+docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --reset-offsets --to-earliest --execute
+```
+Exemplo com __--to-datetime__
+```
+docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --reset-offsets --to-datetime 2021-04-21T15:10:00.000 --execute
+```
+
 Atenção a esta mensagem:
 ```
 Error: Assignments can only be reset if the group 'consumer-tutorial-group' is inactive, but the current state is Stable.
@@ -104,7 +129,7 @@ docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name producer2 --networ
 # Ativando uma nova aplicação Consumer
 > Alterar o valor do parâmetro  `--name` de acordo com a necessidade.
 ```
-docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name consumer3 --network=kafka-tutorial_kafkalabs -it infobarbosa/kafka-consumer:1.0-SNAPSHOT
+docker run -d --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name consumer3 --network=kafka-tutorial_kafkalabs -it infobarbosa/kafka-consumer:1.0-SNAPSHOT
 ```
 
 # Listando os tópicos
