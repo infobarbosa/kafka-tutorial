@@ -2,10 +2,12 @@ package com.github.infobarbosa.kafka;
 
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
@@ -16,7 +18,7 @@ public class ConsumerTutorial {
     public static void main(String[] args) {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, System.getenv("BOOTSTRAP_SERVERS_CONFIG"));
-        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer-tutorial");
@@ -26,14 +28,14 @@ public class ConsumerTutorial {
         final String topic = "teste";
 
         try {
-            KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
+            KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(properties);
 
             consumer.subscribe(Arrays.asList(topic));
             while (true) {
-                ConsumerRecords<String, String> records = consumer.poll(100);
-                for (ConsumerRecord<String, String> record : records) {
-                    String key = record.key();
-                    String value = record.value();
+                ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(100));
+                for (ConsumerRecord<Integer, String> record : records) {
+                    Integer messageKey = record.key();
+                    String messageValue = record.value();
                     long offset = record.offset();
                     long partition = record.partition();
                     long timestamp = record.timestamp();
@@ -41,11 +43,11 @@ public class ConsumerTutorial {
                     consumer.commitAsync(new OffsetCommitCallback() {
                         @Override
                         public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
-                            logger.info("K: " + key
-                                    + "; V: " + value
+                            logger.info("K: " + messageKey
                                     + "; P: " + partition
                                     + "; OS: " + offset
                                     + "; TS: " + timestamp
+                                    + "; V: " + messageValue
                             );
                         }
                     });
