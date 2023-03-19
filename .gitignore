@@ -6,6 +6,7 @@ target/
 *.log
 .project
 .settings/
+.vscode/
 kafka-consumer/.classpath
 kafka-consumer/.project
 kafka-consumer/.settings/
