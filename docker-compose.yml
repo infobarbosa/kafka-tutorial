@@ -123,26 +123,6 @@ services:
       BOOTSTRAP_SERVERS_CONFIG: kafka-1:9092,kafka-2:9092,kafka-3:9092
     networks:
       - kafkalabs
-  
-  scylla-1:
-    image: scylladb/scylla
-    container_name: scylla-1
-    networks:
-      - kafkalabs
-
-  scylla-2:
-    image: scylladb/scylla
-    container_name: scylla-2
-    command: --seeds=scylla-1
-    networks:
-      - kafkalabs
-
-  scylla-3:
-    image: scylladb/scylla
-    container_name: scylla-3
-    command: --seeds=scylla-1
-    networks:
-      - kafkalabs
 
 networks:
   kafkalabs:
