@@ -16,6 +16,12 @@ public class ProducerTutorial {
 
     public static void main(String[] args) {
         Random random = new Random();
+        final String BOOTSTRAP_SERVERS_CONFIG = System.getenv("BOOTSTRAP_SERVERS_CONFIG");
+
+        if(BOOTSTRAP_SERVERS_CONFIG == null){
+            logger.error("Variavel de ambiente BOOTSTRAP_SERVERS_CONFIG não definida.\nUtilize export BOOTSTRAP_SERVERS_CONFIG=localhost:9092.");
+            System.exit(0);
+        }
 
         List<String> itens = new ArrayList<String>();
         itens.add("GELADEIRA");
@@ -30,7 +36,7 @@ public class ProducerTutorial {
         itens.add("RELOGIO");
 
         Properties properties = new Properties();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, System.getenv("BOOTSTRAP_SERVERS_CONFIG"));
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
         properties.put(ProducerConfig.ACKS_CONFIG, "all");
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
