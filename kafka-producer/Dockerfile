@@ -5,7 +5,7 @@ RUN \
 # Update
 apt-get update -y && \
 # Install Java
-apt-get install default-jre -y
+apt install -y openjdk-17-jre
 
 ADD ./target/kafka-producer-1.1-jar-with-dependencies.jar kafka-producer.jar
 
