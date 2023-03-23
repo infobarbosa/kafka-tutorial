@@ -16,8 +16,15 @@ public class ConsumerTutorial {
     private static final Logger logger = LoggerFactory.getLogger(ConsumerTutorial.class.getName());
 
     public static void main(String[] args) {
+        final String BOOTSTRAP_SERVERS_CONFIG = System.getenv("BOOTSTRAP_SERVERS_CONFIG");
+
+        if(BOOTSTRAP_SERVERS_CONFIG == null){
+            logger.error("Variavel de ambiente BOOTSTRAP_SERVERS_CONFIG não definida.\nUtilize export BOOTSTRAP_SERVERS_CONFIG=localhost:9092.");
+            System.exit(0);
+        }
+
         Properties properties = new Properties();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, System.getenv("BOOTSTRAP_SERVERS_CONFIG"));
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
