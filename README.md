@@ -1,3 +1,6 @@
+# Autor
+Marcelo Barbosa
+
 # Pré-requisitos
     - Java (JDK)
     - Maven
