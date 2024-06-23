@@ -7,6 +7,6 @@ apt-get update -y && \
 # Install Java
 apt install -y openjdk-17-jre
 
-ADD ./target/kafka-consumer-1.1-jar-with-dependencies.jar kafka-consumer.jar
+ADD ./target/kafka-consumer-1.1.jar kafka-consumer.jar
 
 CMD java -jar kafka-consumer.jar
