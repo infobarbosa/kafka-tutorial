@@ -37,36 +37,41 @@ public class ConsumerTutorial {
         try {
             KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(properties);
 
-            consumer.subscribe(Arrays.asList(topic));
-            while (true) {
-                ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(100));
-                for (ConsumerRecord<Integer, String> record : records) {
-                    Integer messageKey = record.key();
-                    String messageValue = record.value();
-                    long offset = record.offset();
-                    long partition = record.partition();
-                    long timestamp = record.timestamp();
+            try {
+                consumer.subscribe(Arrays.asList(topic));
 
-                    consumer.commitAsync(new OffsetCommitCallback() {
-                        @Override
-                        public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
-                            logger.info("K: " + messageKey
-                                    + "; P: " + partition
-                                    + "; OS: " + offset
-                                    + "; TS: " + timestamp
-                                    + "; V: " + messageValue
-                            );
+                while (true) {
+                    ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(100));
+                    for (ConsumerRecord<Integer, String> record : records) {
+                        Integer messageKey = record.key();
+                        String messageValue = record.value();
+                        long offset = record.offset();
+                        long partition = record.partition();
+                        long timestamp = record.timestamp();
+
+                        consumer.commitAsync(new OffsetCommitCallback() {
+                            @Override
+                            public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {
+                                logger.info("K: " + messageKey
+                                        + "; P: " + partition
+                                        + "; OS: " + offset
+                                        + "; TS: " + timestamp
+                                        + "; V: " + messageValue
+                                );
+                            }
+                        });
+
+                        //coloca pra dormir um pouco
+                        try {
+                            Thread.sleep(100);
                         }
-                    });
-
-                    //coloca pra dormir um pouco
-                    try {
-                        Thread.sleep(100);
-                    }
-                    catch(InterruptedException e){
-                        logger.error("problemas durante o sono.", e);
+                        catch(InterruptedException e){
+                            logger.error("problemas durante o sono.", e);
+                        }
                     }
                 }
+            } finally {
+                consumer.close();
             }
         }
         catch(Exception e){
