@@ -12,19 +12,6 @@ Na pasta raiz do projeto:
 ```
 mvn clean package
 ```
-> Atenção! O projeto utiliza `dockerfile-maven-plugin`, do Spotify. Dessa forma o Maven cuida da criação das imagens do produtor e consumidor automaticamente.
-
-# Build da imagem do produtor
-> Atenção! O projeto utiliza `dockerfile-maven-plugin`, do Spotify. Dessa forma não é necessário fazer o build da imagem manualmente.
-```
-docker build . -t kafka-producer-tutorial-image
-```
-
-# Build da imagem do consumidor
-> Atenção! O projeto utiliza `dockerfile-maven-plugin`, do Spotify. Dessa forma não é necessário fazer o build da imagem manualmente.
-```
-docker build . -t kafka-consumer-tutorial-image
-```
  
 # Inicializando todas as imagens de uma só vez
 ```
@@ -126,13 +113,13 @@ Error: Assignments can only be reset if the group 'consumer-tutorial-group' is i
 # Ativando uma nova aplicação Producer 
 > Alterar o valor parâmetro  `--name` de acordo com a necessidade.
 ```
-docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name producer2 --network=kafka-tutorial_kafkalabs -it infobarbosa/kafka-producer:1.0-SNAPSHOT
+docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name producer2 --network=kafka-tutorial_kafkalabs -d infobarbosa/kafka-producer:1.2
 ```
 
 # Ativando uma nova aplicação Consumer
 > Alterar o valor do parâmetro  `--name` de acordo com a necessidade.
 ```
-docker run -d --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name consumer3 --network=kafka-tutorial_kafkalabs -it infobarbosa/kafka-consumer:1.0-SNAPSHOT
+docker run -d --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name consumer3 --network=kafka-tutorial_kafkalabs -d infobarbosa/kafka-consumer:1.2
 ```
 
 # Listando os tópicos
