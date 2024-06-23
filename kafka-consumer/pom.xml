@@ -12,7 +12,7 @@
     <groupId>com.github.infobarbosa</groupId>
     <artifactId>kafka-consumer</artifactId>
     <name>kafka-consumer</name>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <url>http://maven.apache.org</url>
     <repositories>
@@ -82,8 +82,10 @@
                 </executions>
                 <configuration>
                     <mainClass>com.github.infobarbosa.kafka.ConsumerTutorial</mainClass>
-                    <imageName>infobarbosa/kafka-consumer</imageName>
-                    <tag>${project.version}</tag>
+                    <image>
+                        <name>infobarbosa/kafka-consumer</name>
+                        <tags>infobarbosa/kafka-consumer:${project.version}</tags>
+                    </image>
                 </configuration>
             </plugin>
         </plugins>
