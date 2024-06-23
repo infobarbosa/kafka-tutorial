@@ -11,12 +11,14 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 
 public class ConsumerTutorial {
     private static final Logger logger = LoggerFactory.getLogger(ConsumerTutorial.class.getName());
 
     public static void main(String[] args) {
         final String BOOTSTRAP_SERVERS_CONFIG = System.getenv("BOOTSTRAP_SERVERS_CONFIG");
+        final int CLIENT_ID_CONFIG = new Random().nextInt();
 
         if(BOOTSTRAP_SERVERS_CONFIG == null){
             logger.error("Variavel de ambiente BOOTSTRAP_SERVERS_CONFIG não definida.\nUtilize export BOOTSTRAP_SERVERS_CONFIG=localhost:9092.");
@@ -28,7 +30,7 @@ public class ConsumerTutorial {
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer-tutorial");
+        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer-" + CLIENT_ID_CONFIG);
         properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, "100");
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-tutorial-group");
 
