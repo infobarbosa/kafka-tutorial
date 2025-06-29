@@ -15,11 +15,9 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LOG_DIRS: /tmp/kraft-logs/kafka-kraft-1
-      KAFKA_CLUSTER_ID: "fXyZ123AbcDeFgHiJkLmN" # Substitua por um UUID real gerado com kafka-storage.sh random-uuid
+      CLUSTER_ID: "bo_LvbdpRFe9kbt6YQzsoQ" # Substitua por um UUID real gerado com kafka-storage.sh random-uuid
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-    volumes:
-      - kafka-kraft-1-data:/tmp/kraft-logs/kafka-kraft-1
 
   kafka-kraft-2:
     image: confluentinc/cp-kafka:7.6.0
@@ -37,11 +35,9 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LOG_DIRS: /tmp/kraft-logs/kafka-kraft-2
-      KAFKA_CLUSTER_ID: "fXyZ123AbcDeFgHiJkLmN" # Substitua por um UUID real
+      CLUSTER_ID: "bo_LvbdpRFe9kbt6YQzsoQ" # Substitua por um UUID real
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-    volumes:
-      - kafka-kraft-2-data:/tmp/kraft-logs/kafka-kraft-2
 
   kafka-kraft-3:
     image: confluentinc/cp-kafka:7.6.0
@@ -59,13 +55,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LOG_DIRS: /tmp/kraft-logs/kafka-kraft-3
-      KAFKA_CLUSTER_ID: "fXyZ123AbcDeFgHiJkLmN" # Substitua por um UUID real
+      CLUSTER_ID: "bo_LvbdpRFe9kbt6YQzsoQ" # Substitua por um UUID real
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-    volumes:
-      - kafka-kraft-3-data:/tmp/kraft-logs/kafka-kraft-3
 
-volumes:
-  kafka-kraft-1-data:
-  kafka-kraft-2-data:
-  kafka-kraft-3-data:
