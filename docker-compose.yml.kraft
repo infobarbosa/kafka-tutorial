@@ -5,6 +5,7 @@ services:
     container_name: kafka-kraft-1
     ports:
       - "9092:9092"
+    networks: [ "kafka-net" ]
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
@@ -25,6 +26,7 @@ services:
     container_name: kafka-kraft-2
     ports:
       - "9192:9192"
+    networks: [ "kafka-net" ]
     environment:
       KAFKA_NODE_ID: 2
       KAFKA_PROCESS_ROLES: broker,controller
@@ -45,6 +47,7 @@ services:
     container_name: kafka-kraft-3
     ports:
       - "9292:9292"
+    networks: [ "kafka-net" ]
     environment:
       KAFKA_NODE_ID: 3
       KAFKA_PROCESS_ROLES: broker,controller
@@ -59,3 +62,5 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
+networks:
+  kafka-net:

@@ -2,12 +2,12 @@
 
 echo "Iniciando o Produtor Python..."
 
-# Ativa o ambiente virtual
-source venv/bin/activate
+# Executa a imagem infobarbosa/kafka-producer-python:latest
+docker run --rm \
+    --name kafka-producer-python \
+    --network kafka-net \
+    -e BOOTSTRAP_SERVERS_CONFIG="kafka-kraft-1:9092,kafka-kraft-2:9192,kafka-kraft-3:9292" \
+    -e TOPIC_NAME=tutorial-python \
+    infobarbosa/kafka-producer-python:latest
 
-# Navega até o diretório do produtor Python e executa o script
-cd kafka-producer-python/
-python producer.py
-
-# Desativa o ambiente virtual (opcional, mas boa prática)
-deactivate
+echo "Produtor Python finalizado."
