@@ -115,11 +115,10 @@ pip install -r requirements.txt
 O script `producer.py` enviará 10 mensagens para o tópico `tutorial-python`.
 
 ```bash
-# Navegue até o diretório do produtor Python
-cd kafka-producer-python/
-
-# Execute o script
-python producer.py
+Execute o script na raiz do projeto:
+```bash
+./run-producer.sh
+```
 ```
 
 **Executando o Consumidor Python:**
