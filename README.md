@@ -38,19 +38,9 @@ Siga os passos abaixo para configurar e executar o ambiente completo.
 
 ### Passo 3.1: Iniciar o Ambiente Kafka com Docker
 
-Este repositório oferece duas configurações de ambiente Kafka via Docker Compose:
+Este repositório utiliza o Docker Compose para configurar e iniciar um cluster Kafka em modo KRaft (sem Zookeeper).
 
-1.  **Com Zookeeper (Padrão):** `docker-compose.yml.zookeeper` (configuração tradicional)
-2.  **Com KRaft (Sem Zookeeper):** `docker-compose.yml.kraft` (configuração moderna, requer um `KAFKA_CLUSTER_ID` gerado)
-
-Para iniciar o ambiente com Zookeeper (recomendado para este tutorial):
-
-```bash
-# Inicia todos os serviços (Kafka, Zookeeper, etc.) em background
-docker-compose -f docker-compose.yml.zookeeper up -d
-```
-
-Para iniciar o ambiente com KRaft (avançado):
+Para iniciar o ambiente Kafka:
 
 ```bash
 ./run-kafka-cluster.sh
@@ -61,9 +51,9 @@ Para verificar se os contêineres estão rodando, você pode usar o comando:
 docker-compose ps
 ```
 
-Para visualizar os logs de um serviço específico (ex: `kafka-1` ou `kafka-kraft-1`):
+Para visualizar os logs de um serviço específico (ex: `kafka-kraft-1`):
 ```bash
-docker logs -f kafka-1
+docker logs -f kafka-kraft-1
 ```
 
 ### Passo 3.2: Executando os Exemplos em Java
