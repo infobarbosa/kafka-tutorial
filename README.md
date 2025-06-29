@@ -22,8 +22,8 @@ O repositório está organizado da seguinte forma:
 
 ```
 /
-├── kafka-consumer/             # Aplicação Java que consome mensagens
-├── kafka-producer/             # Aplicação Java que produz mensagens
+├── kafka-consumer-java/        # Aplicação Java que consome mensagens
+├── kafka-producer-java/        # Aplicação Java que produz mensagens
 ├── kafka-consumer-python/      # Script Python que consome mensagens
 ├── kafka-producer-python/      # Script Python que produz mensagens
 ├── docker-compose.yml          # Arquivo principal para orquestrar o ambiente
@@ -80,14 +80,14 @@ mvn clean package
 
 A aplicação `kafka-producer` enviará uma mensagem a cada segundo para o tópico `tutorial-java`.
 ```bash
-java -jar kafka-producer/target/kafka-producer-1.2.jar
+java -jar kafka-producer-java/target/kafka-producer-1.2.jar
 ```
 
 **Executando o Consumidor Java:**
 
 A aplicação `kafka-consumer` se inscreverá no tópico `tutorial-java` para receber as mensagens.
 ```bash
-java -jar kafka-consumer/target/kafka-consumer-1.2.jar
+java -jar kafka-consumer-java/target/kafka-consumer-1.2.jar
 ```
 
 ### Passo 3.3: Executando os Exemplos em Python
