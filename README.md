@@ -126,11 +126,10 @@ Execute o script na raiz do projeto:
 O script `consumer.py` se inscreverá no tópico `tutorial-python` para receber as mensagens.
 
 ```bash
-# Navegue até o diretório do consumidor Python
-cd kafka-consumer-python/
-
-# Execute o script
-python consumer.py
+Execute o script na raiz do projeto:
+```bash
+./run-consumer.sh
+```
 ```
 
 ## 4. Comandos Úteis do Kafka (via Docker)
