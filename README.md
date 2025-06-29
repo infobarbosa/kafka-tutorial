@@ -46,7 +46,7 @@ Para iniciar o ambiente Kafka:
 
 Para verificar se os contêineres estão rodando, você pode usar o comando:
 ```bash
-docker compose ps
+docker compose -f docker-compose.yml.kraft ps
 
 ```
 
@@ -56,25 +56,29 @@ docker logs -f kafka-kraft-1
 
 ```
 
-
-
 ### Passo 3.3: Executando os Exemplos em Python
 
 Para os scripts Python, é uma boa prática criar um ambiente virtual e instalar as dependências.
 
-**Configurando o Ambiente Python:**
+Fazendo o build da imagem do produtor e consumidor:
 
 ```bash
-# Crie um ambiente virtual
-python3 -m venv venv
+bash ./build-images.sh
 
-# Ative o ambiente virtual
-source venv/bin/activate
-
-# Instale as dependências a partir do arquivo requirements.txt
-pip install -r requirements.txt
 ```
-*(Nota: Após terminar, você pode desativar o ambiente com o comando `deactivate`)*
+
+Execute o comando a seguir para verificar as imagens geradas:
+```bash
+docker images
+
+```
+
+Output esperado:
+```
+REPOSITORY                                 TAG             IMAGE ID       CREATED          SIZE
+infobarbosa/kafka-consumer-python          latest          17508d12e4c7   34 minutes ago   125MB
+infobarbosa/kafka-producer-python          latest          69963d295cca   34 minutes ago   125MB
+```
 
 **Executando o Produtor Python:**
 
