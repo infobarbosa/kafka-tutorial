@@ -4,9 +4,6 @@ import logging
 import random
 import time
 from kafka import KafkaConsumer
-# TopicPartition e OffsetAndMetadata não são estritamente necessários se usarmos consumer.commit() sem args,
-# mas seriam úteis para commits de offset mais granulares.
-# from kafka.structs import TopicPartition, OffsetAndMetadata
 
 # Configuração do Logger
 logging.basicConfig(
@@ -25,7 +22,7 @@ def main():
     client_id_suffix = random.randint(0, 2**31 - 1)
     client_id = f'consumer-py-{client_id_suffix}'
     group_id = os.getenv("KAFKA_GROUP_ID", "consumer-tutorial-group-py")
-    topic = os.getenv("KAFKA_TOPIC", "tutorial-python")
+    topic = os.getenv("KAFKA_TOPIC", "kafka-tutorial")
 
     logger.info(f"Iniciando Kafka Consumer para o tópico: {topic}")
     logger.info(f"Bootstrap Servers: {BOOTSTRAP_SERVERS_CONFIG}")
@@ -40,10 +37,9 @@ def main():
             group_id=group_id,
             key_deserializer=lambda k: int.from_bytes(k, byteorder='big', signed=True) if k is not None else None,
             value_deserializer=lambda v: v.decode('utf-8') if v is not None else None,
-            enable_auto_commit=False, # Equivalente a "false"
+            enable_auto_commit=False, 
             heartbeat_interval_ms=100,
-            auto_offset_reset='earliest', # Comportamento comum para iniciar do início se não houver offset
-            # session_timeout_ms e max_poll_interval_ms podem precisar de ajuste dependendo do broker
+            auto_offset_reset='earliest'
         )
 
         consumer.subscribe([topic])
@@ -61,14 +57,11 @@ def main():
                     partition = record.partition
                     timestamp = record.timestamp
 
-                    # Em Java, o commitAsync é chamado e o log ocorre no callback.
-                    # Aqui, iniciamos o commit e logamos em seguida.
-                    # consumer.commit() sem args com asynchronous=True comita os offsets atuais de todas as partições.
                     consumer.commit() 
 
                     logger.info(f"K: {message_key}; P: {partition}; OS: {offset}; TS: {timestamp}; V: {message_value}")
 
-                    # Coloca pra dormir um pouco, similar ao Thread.sleep(100)
+                    # Coloca pra dormir um pouco, (100ms)
                     time.sleep(0.1)
 
     except KeyboardInterrupt:
