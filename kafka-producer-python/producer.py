@@ -41,15 +41,15 @@ def main():
             acks='all',
             key_serializer=lambda k: k.to_bytes(4, byteorder='big', signed=True) if k is not None else None, # Serializador para Inteiro
             value_serializer=lambda v: v.encode('utf-8') if v is not None else None, # Serializador para String
-            client_id='producer-tutorial-py', # Similar ao Java
+            client_id='producer-tutorial', 
             linger_ms=100,
             retries=3
         )
 
-        topic = os.getenv("KAFKA_TOPIC", "tutorial-python")
+        topic = os.getenv("KAFKA_TOPIC", "kafka-tutorial") 
         logger.info(f"Iniciando Kafka Producer. Enviando mensagens para o tópico: {topic}")
 
-        for i in range(100000): # Similar ao loop de 100000 do Java
+        for i in range(100000): 
             message_key = i
             item_key = random.randint(0, len(itens) - 1)
             message_value = f"{itens[item_key]} vendido em {int(time.time() * 1000)}"
@@ -59,7 +59,7 @@ def main():
             future.add_callback(lambda rm: on_send_success(rm, message_key, message_value))
             future.add_errback(lambda exc: on_send_error(exc, message_key))
 
-            # Coloca pra dormir um pouco, similar ao Thread.sleep(100)
+            # Coloca pra dormir um pouco (100ms)
             time.sleep(0.1)
 
     except KeyboardInterrupt:
