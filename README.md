@@ -1,10 +1,12 @@
 # Tutorial de Apache Kafka: Produtores e Consumidores
+Author: Prof. Barbosa  
+Contact: infobarbosa@gmail.com  
+Github: [infobarbosa](https://github.com/infobarbosa)
 
 Este repositório contém um tutorial completo para estudantes de pós-graduação, focado em demonstrar os conceitos fundamentais do Apache Kafka através de exemplos práticos.
 
 O ambiente é orquestrado com Docker Compose, facilitando a inicialização de um cluster Kafka e a execução de aplicações produtoras e consumidoras desenvolvidas em **Java** e **Python**.
 
-**Autor:** Marcelo Barbosa
 
 ## 1. Pré-requisitos
 
