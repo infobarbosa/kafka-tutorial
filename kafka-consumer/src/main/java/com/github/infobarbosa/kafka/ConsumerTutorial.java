@@ -32,9 +32,16 @@ public class ConsumerTutorial {
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer-" + CLIENT_ID_CONFIG);
         properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, "100");
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-tutorial-group");
+        String groupId = System.getenv("KAFKA_GROUP_ID");
+        if (groupId == null) {
+            groupId = "consumer-tutorial-group";
+        }
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
-        final String topic = "teste";
+        String topic = System.getenv("KAFKA_TOPIC");
+        if (topic == null) {
+            topic = "tutorial-java";
+        }
 
         try {
             KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(properties);

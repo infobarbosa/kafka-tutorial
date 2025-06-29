@@ -45,7 +45,11 @@ public class ProducerTutorial {
         properties.put(ProducerConfig.RETRIES_CONFIG, "3");
 
         KafkaProducer<Integer, String> producer = new KafkaProducer<Integer, String>(properties);
-        final String topic = "teste";
+
+        String topic = System.getenv("KAFKA_TOPIC");
+        if (topic == null) {
+            topic = "tutorial-java";
+        }
 
         ProducerRecord<Integer, String> record = null;
         

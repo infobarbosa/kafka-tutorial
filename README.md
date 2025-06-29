@@ -1,158 +1,198 @@
-# Autor
-Marcelo Barbosa
+# Tutorial de Apache Kafka: Produtores e Consumidores
 
-# Pré-requisitos
-    - Java (JDK)
-    - Maven
-    - Docker
-    - Docker Compose
+Este repositório contém um tutorial completo para estudantes de pós-graduação, focado em demonstrar os conceitos fundamentais do Apache Kafka através de exemplos práticos.
 
-# Build do projeto
-Na pasta raiz do projeto:
-```
-mvn clean package
-```
- 
-# Inicializando todas as imagens de uma só vez
-```
-docker-compose up -d
-```
+O ambiente é orquestrado com Docker Compose, facilitando a inicialização de um cluster Kafka e a execução de aplicações produtoras e consumidoras desenvolvidas em **Java** e **Python**.
 
-# Inicializando apenas o Zookeeper
-```
-docker-compose up -d zookeeper-1 zookeeper-2 zookeeper-3
-```
-# Inicializando o Kafka
-```
-docker-compose up -d kafka-1 kafka-2 kafka-3
-```
+**Autor:** Marcelo Barbosa
 
-### `KAFKA_NUM_PARTITIONS`
-Perceba que o parâmetro `KAFKA_NUM_PARTITIONS` no arquivo docker-compose.yml está ajustado para **6**. Ou seja, um tópico criado automaticamente terá 6 partições por padrão.
+## 1. Pré-requisitos
 
-### `KAFKA_DEFAULT_REPLICATION_FACTOR`
-Perceba que o parâmetro `KAFKA_DEFAULT_REPLICATION_FACTOR` no arquivo docker-compose.yml está ajustado para **3**. Ou seja, um tópico criado automaticamente terá fator de replicação igual a 3 por padrão.
+Antes de começar, garanta que você tenha as seguintes ferramentas instaladas em seu sistema:
 
-# Logs do Zookeeper
+*   **Docker e Docker Compose:** Essenciais para criar e gerenciar o ambiente Kafka.
+*   **Java (JDK 11+):** Necessário para executar os exemplos em Java.
+*   **Maven:** Utilizado para compilar e empacotar as aplicações Java.
+*   **Python (3.8+):** Necessário para executar os exemplos em Python.
+*   **Git:** Para clonar este repositório.
+
+## 2. Estrutura do Projeto
+
+O repositório está organizado da seguinte forma:
+
 ```
-docker logs -f zookeeper1
+/
+├── kafka-consumer/             # Aplicação Java que consome mensagens
+├── kafka-producer/             # Aplicação Java que produz mensagens
+├── kafka-consumer-python/      # Script Python que consome mensagens
+├── kafka-producer-python/      # Script Python que produz mensagens
+├── docker-compose.yml          # Arquivo principal para orquestrar o ambiente
+└── pom.xml                     # POM pai para os módulos Java
 ```
 
-# Logs do Kafka
+## 3. Como Executar o Tutorial (Passo a Passo)
+
+Siga os passos abaixo para configurar e executar o ambiente completo.
+
+### Passo 3.1: Iniciar o Ambiente Kafka com Docker
+
+Este repositório oferece duas configurações de ambiente Kafka via Docker Compose:
+
+1.  **Com Zookeeper (Padrão):** `docker-compose.yml.zookeeper` (configuração tradicional)
+2.  **Com KRaft (Sem Zookeeper):** `docker-compose.yml.kraft` (configuração moderna, requer um `KAFKA_CLUSTER_ID` gerado)
+
+Para iniciar o ambiente com Zookeeper (recomendado para este tutorial):
+
+```bash
+# Inicia todos os serviços (Kafka, Zookeeper, etc.) em background
+docker-compose -f docker-compose.yml.zookeeper up -d
 ```
+
+Para iniciar o ambiente com KRaft (avançado):
+
+```bash
+# Certifique-se de ter gerado um KAFKA_CLUSTER_ID e atualizado o docker-compose.yml.kraft
+docker-compose -f docker-compose.yml.kraft up -d
+```
+
+Para verificar se os contêineres estão rodando, você pode usar o comando:
+```bash
+docker-compose ps
+```
+
+Para visualizar os logs de um serviço específico (ex: `kafka-1` ou `kafka-kraft-1`):
+```bash
 docker logs -f kafka-1
 ```
 
-# Inicializando o Produtor
-```
-docker-compose up -d producer1
+### Passo 3.2: Executando os Exemplos em Java
+
+As aplicações Java são gerenciadas pelo Maven.
+
+**Compilando o projeto:**
+
+Primeiro, compile e empacote as aplicações Java. Na raiz do projeto, execute:
+```bash
+mvn clean package
 ```
 
-# Logs do produtor
-```
-docker logs -f producer1
+**Executando o Produtor Java:**
+
+A aplicação `kafka-producer` enviará uma mensagem a cada segundo para o tópico `tutorial-java`.
+```bash
+java -jar kafka-producer/target/kafka-producer-1.2.jar
 ```
 
-# Inicializando o Consumidor
-```
-docker-compose up -d consumer1
-docker-compose up -d consumer2
-```
-# Logs do Consumidor
-```
-docker logs -f consumer1
-docker logs -f consumer2
+**Executando o Consumidor Java:**
+
+A aplicação `kafka-consumer` se inscreverá no tópico `tutorial-java` para receber as mensagens.
+```bash
+java -jar kafka-consumer/target/kafka-consumer-1.2.jar
 ```
 
-# Inspecionando Consumer Groups
+### Passo 3.3: Executando os Exemplos em Python
 
-### List
+Para os scripts Python, é uma boa prática criar um ambiente virtual e instalar as dependências.
+
+**Configurando o Ambiente Python:**
+
+```bash
+# Crie um ambiente virtual
+python3 -m venv venv
+
+# Ative o ambiente virtual
+source venv/bin/activate
+
+# Instale as dependências a partir do arquivo requirements.txt
+pip install -r requirements.txt
 ```
-docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --list
-```
+*(Nota: Após terminar, você pode desativar o ambiente com o comando `deactivate`)*
 
-### Describe
-```
-docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --describe --group consumer-tutorial-group
-```
+**Executando o Produtor Python:**
 
-### Reset Offsets
-> O commando `--reset-offsets` só funciona quando o tópico não possui nenhuma aplicação cliente ativa. Caso contrário a seguinte mensagem será emitida:
-> `Error: Assignments can only be reset if the group 'consumer-tutorial-group' is inactive, but the current state is Stable.`
+O script `producer.py` enviará 10 mensagens para o tópico `tutorial-python`.
 
+```bash
+# Navegue até o diretório do produtor Python
+cd kafka-producer-python/
 
-Opções:
-- `--shift-by <qualquer número inteiro positivo ou negativo>`
-- `--to-current`
-- `--to-latest`
-- `--to-offset <offset_integer>`
-- `--to-datetime <datetime_string>`
-- `--by-duration <duration_string>`
-
-`--reset-offsets`, quando utilizado __sem__ a opção `--execute` funciona apenas como um __preview__ do resultado do comando.
-
-Exemplo de __preview__
-```
-docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --reset-offsets --to-earliest 
+# Execute o script
+python producer.py
 ```
 
-Exemplo com __--execute__
-```
-docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --reset-offsets --to-earliest --execute
-```
-Exemplo com __--to-datetime__
-```
-docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic teste --reset-offsets --to-datetime 2021-04-21T15:10:00.000 --execute
+**Executando o Consumidor Python:**
+
+O script `consumer.py` se inscreverá no tópico `tutorial-python` para receber as mensagens.
+
+```bash
+# Navegue até o diretório do consumidor Python
+cd kafka-consumer-python/
+
+# Execute o script
+python consumer.py
 ```
 
-Atenção a esta mensagem:
-```
-Error: Assignments can only be reset if the group 'consumer-tutorial-group' is inactive, but the current state is Stable.
-```
+## 4. Comandos Úteis do Kafka (via Docker)
 
-# Ativando uma nova aplicação Producer 
-> Alterar o valor parâmetro  `--name` de acordo com a necessidade.
-```
-docker run --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name producer2 --network=kafka-tutorial_kafkalabs -d infobarbosa/kafka-producer:1.2
-```
+Você pode executar comandos `kafka-cli` diretamente nos contêineres para administrar o cluster.
 
-# Ativando uma nova aplicação Consumer
-> Alterar o valor do parâmetro  `--name` de acordo com a necessidade.
-```
-docker run -d --env BOOTSTRAP_SERVERS_CONFIG=kafka-1:9092 --name consumer3 --network=kafka-tutorial_kafkalabs -d infobarbosa/kafka-consumer:1.2
-```
+### Tópicos
 
-# Listando os tópicos
-```
-docker exec -it kafka-1 kafka-topics --zookeeper zookeeper1:2181 --list
-```
+*   **Listar todos os tópicos:**
+    ```bash
+    docker exec -it kafka-1 kafka-topics --bootstrap-server kafka-1:9092 --list
+    ```
 
-# Descrevendo um tópico
-```
-docker exec -it kafka-1 kafka-topics --zookeeper zookeeper1:2181 --describe --topic teste
-```
+*   **Descrever um tópico específico (ex: `tutorial-java`):**
+    ```bash
+    docker exec -it kafka-1 kafka-topics --bootstrap-server kafka-1:9092 --describe --topic tutorial-java
+    ```
 
-# Criando um tópico
-```
-docker exec -it kafka-1 kafka-topics --zookeeper zookeeper1:2181 --create --topic palestra-kafka --partitions 50 --replication-factor 3
-```
+*   **Criar um novo tópico:**
+    ```bash
+    docker exec -it kafka-1 kafka-topics --bootstrap-server kafka-1:9092 --create --topic meu-novo-topico --partitions 3 --replication-factor 3
+    ```
 
-# Eliminando um tópico
-```
-docker exec -it kafka-1 kafka-topics --zookeeper zookeeper1:2181 --delete --topic palestra-kafka
-```
+*   **Publicar mensagens via console:**
+    ```bash
+    docker exec -it kafka-1 kafka-console-producer --broker-list kafka-1:9092 --topic meu-novo-topico
+    ```
 
-# Publicando em um tópico
-```
-docker exec -it kafka-1 kafka-console-producer --broker-list kafka-1:9092 --topic teste
-```
+*   **Consumir mensagens via console:**
+    ```bash
+    docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:9092 --topic meu-novo-topico --from-beginning
+    ```
 
-# Subscrevendo um tópico
-```
-docker exec -it kafka-1 kafka-console-consumer --bootstrap-server kafka-1:9092 --topic teste
-```
+### Grupos de Consumidores (Consumer Groups)
 
-# Interrompendo (e eliminando) o laboratório
-```
+*   **Listar todos os grupos de consumidores:**
+    ```bash
+    docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --list
+    ```
+
+*   **Descrever um grupo específico (ex: `consumer-tutorial-group`):**
+    ```bash
+    docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --describe --group consumer-tutorial-group
+    ```
+
+*   **Resetar offsets de um grupo (ex: para o início do tópico):**
+    > **Atenção:** O grupo de consumidores deve estar inativo para resetar os offsets.
+    ```bash
+    docker exec -it kafka-1 kafka-consumer-groups --bootstrap-server kafka-1:9092 --group consumer-tutorial-group --topic tutorial-java --reset-offsets --to-earliest --execute
+    ```
+
+## 5. Encerrando o Ambiente
+
+Para parar e remover todos os contêineres, redes e volumes criados pelo Docker Compose, execute:
+
+```bash
 docker-compose down
 ```
+
+---
+
+### Tópico Avançado: Configurando um Cluster Kafka com KRaft (Sem Zookeeper)
+
+O `NEW-README.md` original continha um guia detalhado para configurar um cluster Kafka manualmente usando o modo KRaft, que elimina a dependência do Zookeeper. Este é um modo de operação mais moderno e eficiente, porém mais complexo de configurar manualmente.
+
+As instruções foram preservadas no arquivo `docs/KRAFT_SETUP.md` para referência futura e para estudantes que desejam aprofundar seus conhecimentos na administração de um cluster Kafka.

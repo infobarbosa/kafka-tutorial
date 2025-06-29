@@ -15,3 +15,4 @@ kafka-producer/.project
 kafka-producer/.settings/
 kafka-consumer/log.name_IS_UNDEFINED
 kafka-producer/log.name_IS_UNDEFINED
+venv/
