@@ -53,8 +53,7 @@ docker-compose -f docker-compose.yml.zookeeper up -d
 Para iniciar o ambiente com KRaft (avançado):
 
 ```bash
-# Certifique-se de ter gerado um KAFKA_CLUSTER_ID e atualizado o docker-compose.yml.kraft
-docker-compose -f docker-compose.yml.kraft up -d
+./run-kafka-cluster.sh
 ```
 
 Para verificar se os contêineres estão rodando, você pode usar o comando:
