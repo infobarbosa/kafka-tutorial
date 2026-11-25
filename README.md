@@ -962,13 +962,13 @@ Outras opções úteis em produção: `--shift-by -10` (volta 10 mensagens em ca
 
 ### 8.c. Experimento rápido no editor: provocando expulsão por `max.poll.interval.ms`
 
-Teste o que acontece quando um consumidor demora mais no processamento (`--delay 8`) do que o limite `max.poll.interval.ms` (`6000` ms):
+Teste o que acontece quando um consumidor demora mais no processamento (`--delay 8`) do que o limite `max.poll.interval.ms` (`6000` ms, acompanhado de `--session-timeout-ms 6000`, já que o `librdkafka` exige `max.poll.interval.ms >= session.timeout.ms`):
 ```sh
 # 8.c.1
 python3 01_producer_basico.py --topico pedidos --mensagens 10 --intervalo 0 --silencioso
-timeout 22 python3 03_consumer_grupo.py \
+timeout 24 python3 03_consumer_grupo.py \
   --nome LENTO-1 --topico pedidos --group grupo-timeout-demo \
-  --delay 8 --max-poll-interval-ms 6000 || true
+  --delay 8 --session-timeout-ms 6000 --max-poll-interval-ms 6000 || true
 ```
 
 Observe no log o erro/rebalanceamento automático disparado porque o consumidor não chamou `poll()` dentro de 6 segundos — um dos problemas mais comuns em pipelines Python que chamam APIs externas lentas sem controlar o tamanho do lote!

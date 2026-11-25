@@ -204,11 +204,28 @@ docker run -d \
   ghcr.io/infobarbosa/kafka-lab-docker-image:latest
 '
 
+# O LabInstanceProfile existe automaticamente no AWS Academy; em contas AWS pessoais é opcional.
+IAM_PROFILE_ARGS=()
+if aws iam get-instance-profile --instance-profile-name "LabInstanceProfile" >/dev/null 2>&1; then
+    IAM_PROFILE_ARGS=(--iam-instance-profile Name="LabInstanceProfile")
+    echo -e "  -> IAM Instance Profile detectado: ${BOLD}LabInstanceProfile${NC}"
+else
+    echo -e "  -> Conta sem LabInstanceProfile (normal fora do AWS Academy); prosseguindo sem Instance Profile."
+fi
+
+# Permite informar um Key Pair opcional via variavel KEY_NAME (ex.: KEY_NAME=minha-chave)
+KEY_ARGS=()
+if [ -n "${KEY_NAME:-}" ]; then
+    KEY_ARGS=(--key-name "${KEY_NAME}")
+    echo -e "  -> Key Pair SSH selecionado: ${BOLD}${KEY_NAME}${NC}"
+fi
+
 INSTANCE_ID=$(aws ec2 run-instances \
     --region "${AWS_REGION}" \
     --image-id "${AMI_ID}" \
     --instance-type "${INSTANCE_TYPE}" \
-    --iam-instance-profile Name="LabInstanceProfile" \
+    "${IAM_PROFILE_ARGS[@]}" \
+    "${KEY_ARGS[@]}" \
     --subnet-id "${SUBNET_ID}" \
     --security-group-ids "${SG_ID}" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${INSTANCE_TAG_NAME}}]" \
