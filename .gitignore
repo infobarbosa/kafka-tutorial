@@ -1,18 +1,11 @@
-*.avro
-.idea/
-.DS_Store
-*.iml
-target/
-*.log
-.project
-.settings/
-.vscode/
-kafka-consumer/.classpath
-kafka-consumer/.project
-kafka-consumer/.settings/
-kafka-producer/.classpath
-kafka-producer/.project
-kafka-producer/.settings/
-kafka-consumer/log.name_IS_UNDEFINED
-kafka-producer/log.name_IS_UNDEFINED
+# Python
+__pycache__/
+*.py[cod]
+.venv/
 venv/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.log
