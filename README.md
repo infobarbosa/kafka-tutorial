@@ -1,4 +1,4 @@
-# Apache Kafka na Prática: Arquitetura KRaft, Armazenamento, Consumer Groups, Resiliência e Benchmark em Python
+# Apache Kafka na Prática
 
 Author: Prof. Barbosa<br>
 Contact: infobarbosa@gmail.com<br>
